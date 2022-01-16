@@ -2,30 +2,37 @@
 
 import csv
 import json
+from pprint import pprint
 
-# use csv.DictReader to load input.csv
-# create a variable 'rows' with all of the rows in the csv
+# load the input.csv file
+with open('input.csv') as f:
+    reader = csv.DictReader(f)
+    rows = list(reader)
 
-# loop through each row of the input which is in the format
+# make an empty list
+json_output = []
+for row in rows:
 
-# {
-#   'title': ..., 
-#   'subtitle': ..., 
-#   'range_min': ..., 
-#   'range_mid': ..., 
-#   'range_max': ..., 
-#   'measure_min': ..., 
-#   'measure_max': ...
-# }
+    # define how to translate the CSV to correct type of JSON
+    item =  {
+        'title': row['title'],
+        'subtitle': row['subtitle'],
+        'ranges': [
+            float(row['range_min']),
+            float(row['range_mid']),
+            float(row['range_max'])],
+        'measures': [
+            float(row['measure_min']),
+            float(row['measure_max'])],
+        'markers': [float(row['markers'])]
+    }
+    # add to the empty list
+    json_output.append(item)
 
-# and transform it into the format
+# output to json
+with open('output.json', 'w') as f:
+    json.dump(json_output, f, indent=4)
 
-# {
-#  'title': ...,
-#  'subtitle': ...,
-#  'ranges': [...],
-#  'measures': [...],
-#  'markers': [...],
-# }
 
-# use json.dump to output, 'output.json'
+# test out the json output
+# pprint(json_output)
